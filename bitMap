@@ -1,0 +1,45 @@
+#define _CRT_SECURE_NO_WARNINGS
+
+#pragma once
+#include <vector>
+class bitMap
+{
+public:
+	bitMap()
+	{}
+	bitMap(size_t size)
+	{
+		_table.resize((size>>5)+1);
+	}
+
+	void set(int data)
+	{
+		size_t byteNo = (data>>5);
+		size_t bitNo = data%32;
+		_table[byteNo] |= (1<<bitNo);//1001 1101   5    0000 0001  
+									 //0010 0000   ����λ��Ϊ1
+ 	}
+	void Reset(int data)
+	{
+		size_t byteNo = data>>5;
+		size_t bitNo = data%32;
+		_table[byteNo] &= ~(1<<bitNo);
+	}
+	bool Test(int data)
+	{
+		size_t byteNo = data>>5;
+		size_t bitNo = data%32;
+		if(data>=_table.capacity()*32)
+		{
+			return false;
+		}
+		if((1<<bitNo) & _table[byteNo])
+		{
+			return true;
+		}
+		return false;
+	}
+
+private:
+	vector<int> _table;
+};
